@@ -923,7 +923,30 @@ export const NonDraggableButtons = ({ label }) => {
 
 
 
-
+ReferenceError: global is not defined
+    at node_modules/buffer/index.js (index.js:43:30)
+    at __require (chunk-76J2PTFD.js?v=4b63edf5:3:50)
+    at node_modules/aws-sdk/lib/browserHashUtils.js (browserHashUtils.js:1:14)
+    at __require (chunk-76J2PTFD.js?v=4b63edf5:3:50)
+    at node_modules/aws-sdk/lib/browserHmac.js (browserHmac.js:1:17)
+    at __require (chunk-76J2PTFD.js?v=4b63edf5:3:50)
+    at node_modules/aws-sdk/lib/browserCryptoLib.js (browserCryptoLib.js:1:12)
+    at __require (chunk-76J2PTFD.js?v=4b63edf5:3:50)
+    at node_modules/aws-sdk/lib/browser_loader.js (browser_loader.js:4:19)
+    at __require (chunk-76J2PTFD.js?v=4b63edf5:3:50)
+node_modules/buffer/index.js @ index.js:43
+__require @ chunk-76J2PTFD.js?v=4b63edf5:3
+node_modules/aws-sdk/lib/browserHashUtils.js @ browserHashUtils.js:1
+__require @ chunk-76J2PTFD.js?v=4b63edf5:3
+node_modules/aws-sdk/lib/browserHmac.js @ browserHmac.js:1
+__require @ chunk-76J2PTFD.js?v=4b63edf5:3
+node_modules/aws-sdk/lib/browserCryptoLib.js @ browserCryptoLib.js:1
+__require @ chunk-76J2PTFD.js?v=4b63edf5:3
+node_modules/aws-sdk/lib/browser_loader.js @ browser_loader.js:4
+__require @ chunk-76J2PTFD.js?v=4b63edf5:3
+node_modules/aws-sdk/lib/browser.js @ browser.js:1
+__require @ chunk-76J2PTFD.js?v=4b63edf5:3
+(anonymous) @ browser.js:19
 
 
 // 

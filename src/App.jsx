@@ -6,6 +6,7 @@ import { Audio } from './components/Audio'
 import Download from './components/Download'
 import data from './data.json';
 import React, { useState } from 'react';
+import TextToSpeechComponent from './components/TextToSpeechComponent';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Tags buttons={buttons} click={handleOnclick}></Tags>
           <TextArea buttons={buttons.ssmlAttributes} displayAtrributes={showAttributes} id={id} />
           <Audio />
+          <TextToSpeechComponent></TextToSpeechComponent>
           <Download buttons={buttons} />
         </div>
       </div>
