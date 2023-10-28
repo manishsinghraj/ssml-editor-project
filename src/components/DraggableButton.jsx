@@ -3,9 +3,8 @@ import { calculateButtonWidth } from '../utils/widthCalculations';
 
 
 
-const DraggableButton = ({ label, ssmlTag, getTag, id }) => {
+const DraggableButton = ({ label, ssmlTag, getTag, id, disableSelectingTag }) => {
 
-    // const [set]
 
     const handleDragStart = (e) => {
         e.dataTransfer.setData('text/plain', ssmlTag);
@@ -13,7 +12,9 @@ const DraggableButton = ({ label, ssmlTag, getTag, id }) => {
 
     const handleOnClick = () => {
         console.log("key" + id);
-        getTag(id);
+        if (!disableSelectingTag){
+            getTag(id);
+        }
         // const textArea = document.getElementById('ssmlTextarea');
         // const { selectionStart, selectionEnd } = textArea;
         // const currentValue = textArea.value;
