@@ -1,9 +1,24 @@
-import React from 'react'
+import React from 'react';
+import ReactPlayer from 'react-player';
 
-export const Audio = () => {
+const Audio = (props) => {
+  const  {audioUrl } = props;
+  console.log(audioUrl)
+
   return (
-      <div className='flex border border-solid border-purple-800 w-3/5 h-15 mt-4 rounded-lg p-4 text-white'>
-        Audio Player components
-      </div>
+    <div className='flex border border-solid border-fuchsia-500 w-3/5 h-15 mt-4 rounded-lg p-4 text-white' >
+      {/* <audio controls>
+        <source src={audioUrl} type='audio/mpeg' />
+        Your browser does not support the audio element.
+      </audio> */}
+      < ReactPlayer
+        url={audioUrl}
+        controls={true}
+        height="50px"
+        width="100%"
+      />
+    </div>
   )
 }
+
+export default Audio;

@@ -920,11 +920,248 @@ export const NonDraggableButtons = ({ label }) => {
 ![Alt text](image-6.png)
 
 
+---
+
+integrating Amazon Polly with ssml - editor
+
+//enabled amazon polly service in AWS
+// lets install sdk in the project
+`npm install aws-sdk`
+
+// Made a new component textToSpeech
+//Imported aws sdk
+import AWS from 'aws-sdk';
+
+//Refer sample code on how to use polly
+
+//Also made change in Audio Component
+//Added React Player for audio component
+//Had to make change in vite.config as i was getting error 
+Uncaught ReferenceError: global is not defined
+
+//in textarea after textarea component wanted to create generate button (non draggable) and also want to pass color to it.
+
+```js 
+import React, { useState, useEffect } from 'react';
+import Buttons from './Buttons';
+
+const TextArea = ({ buttons, displayAtrributes, id, generateButton, textValue }) => {
+    const [showTagAttributes, setShowTagAttributes] = useState(false);
+
+    const ssml = [];
+    for (let items in buttons) {
+        ssml.push(buttons[items]);
+    }
+
+    useEffect(() => {
+        if (displayAtrributes) {
+            setShowTagAttributes(true);
+        }
+        else {
+            setShowTagAttributes(false);
+        }
+    }, [displayAtrributes]);
+
+
+    const generateAudio = () => {
+        console.log("generating Audio");
+
+        const textArea = document.getElementById('ssmlTextarea');
+        textValue(textArea.value);
+        console.log(textArea.value);
+
+        // const { selectionStart, selectionEnd } = textArea;
+        // const currentValue = textArea.value;
+        // const updatedValue = `${currentValue.substring(0, selectionStart)} ${ssmlTag} ${currentValue.substring(selectionEnd)}`;
+        // textArea.value = updatedValue;
+    }
+
+    return (
+        <>
+            <div id='tagAttributes' className='flex border border-solid border-purple-800 w-3/5 h-15 rounded-lg p-4 mt-4 text-white'>
+                {showTagAttributes && <Buttons buttons={ssml[id]} />}
+            </div>
+            <textarea
+                id='ssmlTextarea'
+                className="w-3/5 h-80 p-2 border border-purple-800 rounded-lg bg-transparent text-white"
+                placeholder="Enter your text here, then Drag and drop the tags between the words..." style={{ outline: 'none' }}
+            >
+            </textarea>
+            <div className='flex border border-solid border-purple-800 w-3/5 h-15 rounded-lg p-4'>
+                {<Buttons buttonColor="bg-cyan-400" buttons={generateButton} getClick={generateAudio} />}
+            </div>
+        </>
+    );
+};
+
+export default TextArea;
+
+```
+
+```jsx 
+import './index.css'
+import Header from './components/Header'
+import Tags from './components/Tags'
+import TextArea from './components/TextArea'
+import TextToSpeech from './components/TextToSpeech'
+import Audio from './components/Audio'
+import Download from './components/Download'
+import data from './data.json';
+import React, { useState } from 'react';
+
+
+function App() {
+
+  const buttons = data;
+  const [showAttributes, setShowAttributes] = useState(false);
+  const [id, getId] = useState(-1);
+  const [audioUrl, setAudioUrl] = useState("");
+  const [textToSpeechValue, setTextToSpeechValue] = useState('');
+  console.log("audioUrl is = " + audioUrl);
+
+  const handleOnclick = (id) => {
+    getId(id);
+    setShowAttributes(true);
+  }
+
+  const getAudioUrl = (url) => {
+    setAudioUrl(url);
+  }
+
+  const getTextToSpeechValue = (text) => {
+    console.log("hi got" + text)
+    setTextToSpeechValue(text);
+  }
+
+  return (
+    <>
+      <div className='bg-slate-900 min-h-screen w-screen '>
+        <div className='flex flex-col justify-center items-center'>
+          <Header></Header>
+          <Tags buttons={buttons} click={handleOnclick}></Tags>
+          <TextArea buttons={buttons.ssmlAttributes} generateButton={buttons.generate} displayAtrributes={showAttributes} id={id} textValue={getTextToSpeechValue} />
+          <Audio audioUrl={audioUrl} />
+          <Download buttons={buttons} />
+          <TextToSpeech getAudioUrl={getAudioUrl} text={textToSpeechValue} />
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default App;
+
+```
+
+```jsx 
+// Buttons.js
+import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import DraggableButton from './DraggableButton';
+import { NonDraggableButtons } from './NonDraggableButtons';
+
+const Buttons = (props) => {
+    const { buttons, selectedTag, buttonColor, getClick } = props; 
+    console.log(JSON.stringify(buttons) + "buttons");
+
+    const handleTag = (id) => {
+        selectedTag(id);
+    }
+
+    const handleClick = () => {
+        getClick();
+    }
+
+    let tags = (buttons).map((item, index) => {
+        return (
+            item.draggable ?
+                <DraggableButton getTag={handleTag} key={uuidv4()} id={index} label={item.label} ssmlTag={item.ssmlTag}>{item.label}</DraggableButton>
+                :
+                <NonDraggableButtons buttonColor={buttonColor} key={uuidv4()} label={item.label} onClick={handleClick}>
+                    {item.label}</NonDraggableButtons>
+        );
+    });
+
+    return <>{tags}</>;
+}
+
+export default Buttons;
+
+```
+
+```jsx 
+import React from 'react'
+import { calculateButtonWidth } from '../utils/widthCalculations'
+
+export const NonDraggableButtons = ({ label, buttonColor, onClick }) => {
+    // const [bgColor, setBgColor] = useState('');
+    const bgColorClass = buttonColor;
+    console.log(bgColorClass);
+
+    const handleClick = () => {
+
+        onClick();
+    }
+
+    return (
+        <button
+            draggable="false"
+            className={`ml-4 rounded-md border-2 border-solid border-indigo-800 w-20 h-9 t ${bgColorClass}`}
+            style={{ width: calculateButtonWidth(label)}}
+            onClick={handleClick}
+            >
+            {label}
+        </button>
+    )
+}
+
+```
+
+
+```jsx 
+import React from 'react';
+import Buttons from './Buttons';
+
+const Download = (props) => {
+    const { buttons} = props;
+    const downloadButtton = buttons.download;
+    return (
+        <div className='flex border border-solid border-purple-800 w-3/5 h-15 mt-4 rounded-lg p-4 text-white'>
+            <Buttons buttons={downloadButtton} buttonColor="bg-green-600"/>
+        </div>
+    );
+}
+
+export default Download;
+
+```
+
+npm install --save react-dropdown-select
 
 
 
+const speakRegex = /<speak[^>]*>[\s\S]*<\/speak>/i;
 
 
+The `speakRegex` in your code is a JavaScript regular expression that is used to match text that conforms to a specific pattern. In this case, the pattern represents SSML (Speech Synthesis Markup Language) tags, which are used for controlling speech synthesis in text-to-speech systems.
+
+Here's a breakdown of the `speakRegex` pattern:
+
+- `/`: The pattern is enclosed in forward slashes, which is the standard way to define regular expressions in JavaScript.
+
+- `<speak`: This part of the pattern is looking for the literal text "<speak". The `<` and `speak` are characters to be matched exactly.
+
+- `[^>]*`: This part of the pattern matches any character (`[^]`) that is not a closing angle bracket `>`. The `*` means that it can match zero or more of these characters.
+
+- `>`: This part of the pattern matches the closing angle bracket `>`.
+
+- `[\s\S]*`: This part of the pattern matches any character (`[\s\S]`) zero or more times. `[\s\S]` matches both whitespace characters (`\s`) and non-whitespace characters (`\S`). In essence, it allows matching any character, including spaces, line breaks, and any other characters.
+
+- `</speak>`: This part of the pattern matches the literal text `</speak>`, representing the closing SSML tag.
+
+- `i`: The `i` at the end of the regular expression is a flag that makes the match case-insensitive. It means that it will match both `<speak>` and `<Speak>`.
+
+So, this regular expression is designed to match text that starts with an opening `<speak>` tag, contains any content (including whitespace and other characters), and ends with a closing `</speak>` tag. This is a basic pattern for identifying SSML content in a larger text. If the text matches this pattern, it likely contains SSML markup.
 
 // 
 

@@ -10,9 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.5.1",
+    "aws-sdk": "^2.1482.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropdown-select": "^4.10.0",
+    "react-player": "^2.13.0",
+    "readable-stream": "^4.4.2",
+    "ssml-check-core": "^0.3.9",
     "tailwindcss": "^3.3.3",
     "uuid": "^9.0.1"
   },

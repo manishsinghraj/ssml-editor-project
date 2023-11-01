@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { calculateButtonWidth } from '../utils/widthCalculations';
 
 
 
-const DraggableButton = ({ label, ssmlTag, getTag, id }) => {
-
-    // const [set]
+const DraggableButton = (props) => {
+    const { label, ssmlTag, getTag, id, disableSelectingTag } = props;
 
     const handleDragStart = (e) => {
         e.dataTransfer.setData('text/plain', ssmlTag);
     };
 
     const handleOnClick = () => {
-        console.log("key" + id);
-        getTag(id);
+        if (!disableSelectingTag){
+            getTag(id);
+        }
         // const textArea = document.getElementById('ssmlTextarea');
         // const { selectionStart, selectionEnd } = textArea;
         // const currentValue = textArea.value;
@@ -40,7 +40,7 @@ const DraggableButton = ({ label, ssmlTag, getTag, id }) => {
             draggable="true"
             onDragStart={handleDragStart}
             onClick={handleOnClick}
-            className='ml-4 rounded-md border-2 border-solid border-indigo-800 w-20 h-9 t'
+            className='ml-4 rounded-md border border-solid border-yellow-200 w-20 h-9'
             style={{ width: calculateButtonWidth(label) }}
         >
             {label}
